@@ -13,6 +13,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import MuiDrawer from "@mui/material/Drawer";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { mainListItems, secondaryListItems } from "./List";
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -60,10 +61,7 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 function NavbarContent() {
-  const [auth, setAuth] = React.useState(true);
-  const handleChange = (event) => {
-    setAuth(event.target.checked);
-  };
+  let history = useNavigate();
 
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
@@ -72,41 +70,44 @@ function NavbarContent() {
 
   return (
     <>
-      {auth && (
-        <AppBar position="absolute" open={open}>
-          <Toolbar
+      <AppBar position="absolute" open={open}>
+        <Toolbar
+          sx={{
+            pr: "24px", // keep right padding when drawer closed
+          }}
+        >
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="open drawer"
+            onClick={toggleDrawer}
             sx={{
-              pr: "24px", // keep right padding when drawer closed
+              marginRight: "36px",
+              ...(open && { display: "none" }),
             }}
           >
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={toggleDrawer}
-              sx={{
-                marginRight: "36px",
-                ...(open && { display: "none" }),
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
-              Dashboard
-            </Typography>
+            <MenuIcon />
+          </IconButton>
+          <Typography
+            component="h1"
+            variant="h6"
+            color="inherit"
+            noWrap
+            sx={{ flexGrow: 1 }}
+          >
+            Dashboard
+          </Typography>
 
-            <Button style={{ backgroundColor: "red" }} variant="contained">
-              Logout
-            </Button>
-          </Toolbar>
-        </AppBar>
-      )}
+          <Button
+            onClick={() => history("/")}
+            style={{ backgroundColor: "red" }}
+            variant="contained"
+          >
+            Logout
+          </Button>
+        </Toolbar>
+      </AppBar>
+
       <Drawer variant="permanent" open={open}>
         <Toolbar
           sx={{
